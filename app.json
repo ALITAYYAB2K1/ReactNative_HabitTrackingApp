@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ReactNative",
+    "name": "TrackHabit",
     "slug": "ReactNative",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,7 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.ReactNative"
+      "package": "com.trackhabit"
     },
     "web": {
       "bundler": "metro",
