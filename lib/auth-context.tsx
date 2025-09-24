@@ -4,8 +4,9 @@ import { ID, Models } from "react-native-appwrite";
 import { account } from "./appwrite";
 type AuthContextType = {
   user: Models.User<Models.Preferences> | null;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
+  isloadingUser: boolean;
+  signIn: (email: string, password: string) => Promise<string | null>;
+  signUp: (email: string, password: string) => Promise<string | null>;
   signOut: () => Promise<void>;
 };
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -22,7 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const session = await account.get();
       setUser(session);
-    } catch (error) {
+    } catch {
       setUser(null);
     } finally {
       setIsLoadingUser(false);
@@ -30,8 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
   const signUp = async (email: string, password: string) => {
     try {
-      await account.create(ID.unique(), email, password);
-      await signIn(email, password);
+      await account.create(ID.unique(), email.trim(), password.trim());
+      await signIn(email.trim(), password.trim());
       return null;
     } catch (error) {
       if (error instanceof Error) {
@@ -42,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
   const signIn = async (email: string, password: string) => {
     try {
-      await account.createEmailPasswordSession(email, password);
+      await account.createEmailPasswordSession(email.trim(), password.trim());
       const session = await account.get();
       setUser(session);
       return null;
